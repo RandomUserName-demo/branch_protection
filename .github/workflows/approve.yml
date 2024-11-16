@@ -1,0 +1,18 @@
+name: APPROVE
+
+on: 
+  pull_request # Trigger the workflow on pull request events
+
+permissions:
+  pull-requests: write # Grant write permission on the pull request
+
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl --request POST \
+            --url "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews" \
+            --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+            --header 'content-type: application/json' \
+            -d '{"event":"APPROVE"}'
